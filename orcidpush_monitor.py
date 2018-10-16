@@ -34,14 +34,12 @@ def configure():
              **APPMETRICS_ELASTICSEARCH_KWARGS),
     ]
     INDEX_NAME='inspiremonitoring-prod'
-    async_es_metrics = ThreadedBackend(
-        ElasticsearchBackend,
-        backend_kwargs=dict(
-            hosts=APPMETRICS_ELASTICSEARCH_HOSTS,
-            index=INDEX_NAME),
+    backend = ElasticsearchBackend(
+        hosts=APPMETRICS_ELASTICSEARCH_HOSTS,
+        index=INDEX_NAME
     )
     time_execution.settings.configure(
-        backends=[async_es_metrics],
+        backends=[backend],
         # hooks=(status_code_hook,),
         origin='inspire_next'
     )
