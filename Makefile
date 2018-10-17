@@ -20,7 +20,7 @@ pyclean:
 clean: pyclean
 	rm -rf venv
 
-run: venv
+run:
 	$(PYTHON) orcidpush_monitor.py
 
 cleanpipcache:
