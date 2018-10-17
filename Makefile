@@ -22,3 +22,6 @@ clean: pyclean
 
 run: venv
 	$(PYTHON) orcidpush_monitor.py
+
+cleanpipcache:
+	rm -rf ~/Library/Caches/pip
