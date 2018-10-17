@@ -4,7 +4,6 @@ import time_execution
 
 from pprint import pprint
 
-from time_execution.backends.threaded import ThreadedBackend
 from time_execution.backends.elasticsearch import ElasticsearchBackend
 
 from domain.models import Monitor
