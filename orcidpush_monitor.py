@@ -1,5 +1,6 @@
 import os
 import service_flower.conf
+import service_rabbit.conf
 import time_execution
 
 from pprint import pprint
@@ -17,6 +18,14 @@ def configure():
         HTTP_AUTH_PASSWORD=os.environ['FLOWER_PASSWORD'],
     )
     service_flower.conf.settings.configure(**d)
+
+    d = dict(
+        BASE_URL='http://inspire-prod-broker1.cern.ch:15672/api',
+        REQUEST_TIMEOUT=30,
+        HTTP_AUTH_USERNAME=os.environ['RABBIT_USERNAME'],
+        HTTP_AUTH_PASSWORD=os.environ['RABBIT_PASSWORD'],
+    )
+    service_rabbit.conf.settings.configure(**d)
 
     APPMETRICS_ELASTICSEARCH_KWARGS = dict(
         port=443,
@@ -48,7 +57,13 @@ if __name__ == '__main__':
     configure()
     print('** ORCIDPUSH MONITOR **')
     monitor = Monitor()
-    result = monitor.get_tasks_count()
-    print('TASK COUNT')
+
+    result = monitor.get_celery_tasks_count()
+    print('CELERY TASK COUNT')
     pprint(result)
-    print('END')
+
+    result = monitor.get_rabbit_messages_and_consumers_count()
+    print('\nRABBIT QUEUE SIZE for queue "orcid_push"')
+    print('#messages={}\n#consumers={}'.format(*result))
+
+    print('**END**')

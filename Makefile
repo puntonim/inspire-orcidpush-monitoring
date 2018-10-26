@@ -4,7 +4,7 @@ PIP:="venv/bin/pip"
 CMD_FROM_VENV:=". venv/bin/activate; which"
 PYTHON=$(shell "$(CMD_FROM_VENV)" "python2.7")
 
-.PHONY: venv run
+.PHONY: venv run requirements
 
 default: run;
 
@@ -13,6 +13,9 @@ venv:
 	. venv/bin/activate
 	$(PIP) install -U "pip>=18.0" -q
 	$(PIP) install -r $(DEPS)
+
+requirements:
+	pip install -U -r requirements.txt
 
 pyclean:
 	find . -name *.pyc -delete
