@@ -1,13 +1,22 @@
 import os
-import service_flower.conf
-import service_rabbit.conf
+import sys
 import time_execution
-
+import warnings
 from pprint import pprint
 
+import service_flower.conf
+import service_rabbit.conf
 from time_execution.backends.elasticsearch import ElasticsearchBackend
 
 from domain.models import Monitor
+
+
+# Ignore warnings like:
+# ...http_urllib3.py:135: UserWarning: Connecting to inspire-qa-logs-client1.cern.ch
+# using SSL with verify_certs=False is insecure.
+if not sys.warnoptions:
+    msg = r'Connecting to .* using SSL with verify_certs=False is insecure.'
+    warnings.filterwarnings('ignore', message=msg, module='.*http_urllib3.*')
 
 
 def configure():
