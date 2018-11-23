@@ -1,8 +1,9 @@
 import os
 import sys
-import time_execution
 import warnings
-from pprint import pprint
+
+import click
+import time_execution
 
 import service_flower.conf
 import service_rabbit.conf
@@ -62,17 +63,32 @@ def configure():
     )
 
 
-if __name__ == '__main__':
+@click.group()
+def cli():
+    pass
+
+
+@click.command()
+def prod():
+    perform_monitoring('prod')
+
+
+@click.command()
+def qa():
+    click.echo('Not implemented yet!')
+
+
+cli.add_command(prod)
+cli.add_command(qa)
+
+
+def perform_monitoring(env):
     configure()
-    print('** ORCIDPUSH MONITOR **')
     monitor = Monitor()
+    monitor.get_celery_tasks_count()
+    monitor.get_rabbit_messages_and_consumers_count()
 
-    result = monitor.get_celery_tasks_count()
-    print('CELERY TASK COUNT')
-    pprint(result)
 
-    result = monitor.get_rabbit_messages_and_consumers_count()
-    print('\nRABBIT QUEUE SIZE for queue "orcid_push"')
-    print('#messages={}\n#consumers={}'.format(*result))
-
-    print('**END**')
+if __name__ == '__main__':
+    click.echo('** INSPIRE ORCID PUSH INFRA MONITOR **')
+    cli()

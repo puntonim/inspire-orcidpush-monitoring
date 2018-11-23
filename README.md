@@ -1,14 +1,17 @@
-# inspire-orcidpush-monitoring
+# Inspire ORCID push infra monitoring
 
 Usage:
 ```bash
-$ make venv
 $ export APPMETRICS_ELASTICSEARCH_USERNAME=myuser
 $ export APPMETRICS_ELASTICSEARCH_PASSWORD=mypass 
 $ export FLOWER_USERNAME=myuser 
 $ export FLOWER_PASSWORD=mypass 
 $ export RABBIT_USERNAME=myuser 
 $ export RABBIT_PASSWORD=mypass 
-
-make run
+# Then:
+$ pip install -r requirements/requirements-base.txt
+$ python orcidpushinfra_monitor.py prod
+# Or with the Makefile:
+$ make venv
+$ make prod
 ```

@@ -10,7 +10,7 @@ PYTHON=$(shell "$(CMD_FROM_VENV)" "python2.7")
 
 .PHONY: venv run requirements pyclean clean pipclean
 
-default: run;
+default: qa;
 
 venv:
 	$(VIRTUALENV) -p $(shell which python2.7) venv
@@ -21,8 +21,11 @@ venv:
 _make_venv_if_empty:
 	@[ -e ./venv/bin/python ] || make venv
 
-run: _make_venv_if_empty
-	$(PYTHON) orcidpush_monitor.py
+qa: _make_venv_if_empty
+	$(PYTHON) orcidpushinfra_monitor.py qa
+
+prod: _make_venv_if_empty
+	$(PYTHON) orcidpushinfra_monitor.py prod
 
 
 ## Utilities for the venv currently active.

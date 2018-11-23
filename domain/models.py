@@ -1,5 +1,7 @@
+import json
 import socket
 
+import click
 
 from service_flower import states
 from service_flower.client import FlowerClient
@@ -16,6 +18,7 @@ class Monitor(object):
         self.rabbit_client = RabbitClient()
 
     def get_celery_tasks_count(self):
+        click.echo('CELERY TASK COUNT')
         taskname = 'inspirehep.modules.orcid.tasks.orcid_push'
         result = {}
         for state in states.ALL_STATES:
@@ -27,9 +30,11 @@ class Monitor(object):
                 state=state,
                 name=taskname,
             )
+        click.echo(json.dumps(result, indent=2))
         return result
 
     def get_rabbit_messages_and_consumers_count(self):
+        click.echo('RABBIT QUEUE SIZE for queue "orcid_push"')
         response = self.rabbit_client.get_queue('inspire', 'orcid_push')
         response.raise_for_result()
         consumers = response.get_consumers_count()
@@ -43,6 +48,7 @@ class Monitor(object):
             count=consumers,
             name='rabbit-queue-orcid_push-counsumers-count',
         )
+        click.echo('#messages={}\n#consumers={}'.format(messages, consumers))
         return messages, consumers
 
     def _write_metric(self, name='default', **kwargs):
